@@ -762,6 +762,42 @@
       "artifacts": [
         "IERC721Receiver"
       ]
+    },
+    "/app/contracts/Greeter.sol": {
+      "lastModificationDate": 1760800212994,
+      "contentHash": "470e764d275e952fe9efd27d74651c7f",
+      "sourceName": "contracts/Greeter.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "Greeter"
+      ]
     }
   }
 }
