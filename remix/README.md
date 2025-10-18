@@ -59,3 +59,63 @@ Hướng dẫn này cung cấp các bước để biên dịch và triển khai 
 5.  Nhấp vào nút "Deploy".
 6.  Ví của bạn sẽ nhắc bạn xác nhận giao dịch. Xác nhận nó.
 7.  Sau khi giao dịch được khai thác, bạn sẽ thấy hợp đồng đã triển khai trong phần "Deployed Contracts" trong Remix.
+
+---
+
+# Deploying and Interacting with the HelloWorld Contract
+
+These instructions explain how to use the `HelloWorld.sol` contract in Remix.
+
+## 1. Compile the Contract
+
+1.  Follow the same initial steps to open the project in Remix.
+2.  In the Remix file explorer, open `contracts/HelloWorld.sol`.
+3.  Go to the "Solidity Compiler" tab and click "Compile HelloWorld.sol".
+
+## 2. Deploy the Contract
+
+1.  Go to the "Deploy & Run Transactions" tab.
+2.  Ensure your environment is set (e.g., "Injected Provider - MetaMask").
+3.  In the "Contract" dropdown, select "HelloWorld - contracts/HelloWorld.sol".
+4.  Click the "Deploy" button and confirm the transaction in your wallet.
+
+## 3. Interact with the Contract
+
+Once deployed, you will see the `HelloWorld` contract under "Deployed Contracts".
+
+*   **To read the greeting:**
+    *   Click the blue button labeled `greeting`. The current greeting ("Hello, World!") will be displayed below.
+*   **To change the greeting:**
+    *   In the text field next to the orange `setGreeting` button, type a new message (e.g., "Xin chào Việt Nam"). Make sure to enclose it in double quotes: `"Xin chào Việt Nam"`.
+    *   Click the `setGreeting` button and confirm the transaction in your wallet.
+    *   After the transaction is confirmed, click the `greeting` button again to see the updated message.
+
+---
+
+# Hướng dẫn triển khai và tương tác với hợp đồng HelloWorld
+
+Hướng dẫn này giải thích cách sử dụng hợp đồng `HelloWorld.sol` trong Remix.
+
+## 1. Biên dịch hợp đồng
+
+1.  Thực hiện các bước ban đầu tương tự để mở dự án trong Remix.
+2.  Trong trình khám phá tệp của Remix, mở tệp `contracts/HelloWorld.sol`.
+3.  Chuyển đến tab "Solidity Compiler" và nhấp vào "Compile HelloWorld.sol".
+
+## 2. Triển khai hợp đồng
+
+1.  Chuyển đến tab "Deploy & Run Transactions".
+2.  Đảm bảo môi trường của bạn đã được thiết lập (ví dụ: "Injected Provider - MetaMask").
+3.  Trong menu thả xuống "Contract", chọn "HelloWorld - contracts/HelloWorld.sol".
+4.  Nhấp vào nút "Deploy" và xác nhận giao dịch trong ví của bạn.
+
+## 3. Tương tác với hợp đồng
+
+Sau khi triển khai, bạn sẽ thấy hợp đồng `HelloWorld` trong phần "Deployed Contracts".
+
+*   **Để đọc lời chào:**
+    *   Nhấp vào nút màu xanh có nhãn `greeting`. Lời chào hiện tại ("Hello, World!") sẽ được hiển thị bên dưới.
+*   **Để thay đổi lời chào:**
+    *   Trong trường văn bản bên cạnh nút `setGreeting` màu cam, nhập một thông điệp mới (ví dụ: "Xin chào Việt Nam"). Hãy chắc chắn rằng bạn đặt nó trong dấu ngoặc kép: `"Xin chào Việt Nam"`.
+    *   Nhấp vào nút `setGreeting` và xác nhận giao dịch trong ví của bạn.
+    *   Sau khi giao dịch được xác nhận, hãy nhấp lại vào nút `greeting` để xem thông điệp đã được cập nhật.
