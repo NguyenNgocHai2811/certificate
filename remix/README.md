@@ -119,3 +119,74 @@ Sau khi triển khai, bạn sẽ thấy hợp đồng `HelloWorld` trong phần 
     *   Trong trường văn bản bên cạnh nút `setGreeting` màu cam, nhập một thông điệp mới (ví dụ: "Xin chào Việt Nam"). Hãy chắc chắn rằng bạn đặt nó trong dấu ngoặc kép: `"Xin chào Việt Nam"`.
     *   Nhấp vào nút `setGreeting` và xác nhận giao dịch trong ví của bạn.
     *   Sau khi giao dịch được xác nhận, hãy nhấp lại vào nút `greeting` để xem thông điệp đã được cập nhật.
+---
+
+# Hướng dẫn Kiểm thử Hợp đồng Bỏ phiếu (Voting.sol)
+
+Hướng dẫn này sẽ chỉ bạn cách biên dịch, triển khai và tương tác với hợp đồng `Voting.sol` ngay trên Remix IDE để kiểm tra các chức năng của nó.
+
+## 1. Mở và Biên dịch Hợp đồng
+
+1.  **Mở tệp:** Trong trình khám phá tệp của Remix, hãy mở `contracts/Voting.sol`.
+2.  **Biên dịch:** Chuyển đến tab "Solidity Compiler". Đảm bảo phiên bản compiler tương thích với `^0.8.20` (ví dụ: `0.8.25`). Nhấp vào nút **"Compile Voting.sol"**. Một dấu kiểm màu xanh lá sẽ xuất hiện nếu biên dịch thành công.
+
+## 2. Triển khai Hợp đồng
+
+1.  **Chuyển tab:** Chuyển đến tab "Deploy & Run Transactions".
+2.  **Chọn Môi trường:** Trong mục "Environment", chọn **"Remix VM (London)"**. Đây là một máy ảo blockchain cục bộ, rất tiện lợi để kiểm thử nhanh mà không cần ví thật.
+3.  **Deploy:** Đảm bảo "Contract" đã chọn là **"Voting - contracts/Voting.sol"**. Nhấp vào nút **"Deploy"**.
+4.  Hợp đồng sau khi triển khai sẽ xuất hiện ở mục "Deployed Contracts". Tài khoản mà bạn dùng để deploy sẽ tự động là **chủ sở hữu (owner)** của hợp đồng.
+
+## 3. Tương tác và Kiểm thử Hợp đồng
+
+Bây giờ, hãy thực hiện các bước sau để kiểm tra luồng hoạt động của hợp đồng.
+
+### Bước 1: Thêm Ứng cử viên (Chỉ Owner)
+
+Bạn đang sử dụng tài khoản của owner (tài khoản đầu tiên trong danh sách "ACCOUNT" của Remix VM).
+
+1.  Trong hợp đồng đã triển khai, tìm chức năng `addCandidate`.
+2.  Nhập tên ứng cử viên vào ô `_name`, ví dụ: `"Ung cu vien A"`.
+3.  Nhập mô tả vào ô `_description`, ví dụ: `"Mo ta ve A"`.
+4.  Nhấp vào nút `addCandidate` màu cam.
+5.  Thêm một ứng cử viên khác với tên `"Ung cu vien B"` và mô tả `"Mo ta ve B"`.
+
+*   **Kiểm tra:**
+    *   Để xem thông tin ứng cử viên, nhập `1` vào ô bên cạnh nút `candidates` màu xanh và nhấp vào đó. Bạn sẽ thấy thông tin của "Ung cu vien A".
+    *   Làm tương tự với ID `2` để xem "Ung cu vien B".
+
+### Bước 2: Bắt đầu Cuộc bỏ phiếu (Chỉ Owner)
+
+1.  Nhấp vào nút `startVoting` màu cam.
+2.  Trạng thái cuộc bỏ phiếu bây giờ sẽ chuyển sang `Running` (Đang diễn ra).
+
+*   **Kiểm tra:**
+    *   Nhấp vào nút `votingStatus` màu xanh. Kết quả sẽ hiển thị là `1` (tương ứng với `Running`).
+    *   Thử gọi lại hàm `addCandidate`. Giao dịch sẽ thất bại, vì không thể thêm ứng cử viên khi cuộc bỏ phiếu đang diễn ra.
+
+### Bước 3: Thực hiện Bỏ phiếu (Bất kỳ ai)
+
+1.  Trong danh sách "ACCOUNT" của Remix VM, **chọn một tài khoản khác** (ví dụ: tài khoản thứ hai) để đóng vai người bỏ phiếu.
+2.  Trong hợp đồng đã triển khai, tìm chức năng `vote`.
+3.  Nhập `1` vào ô `_candidateId` để bỏ phiếu cho "Ung cu vien A".
+4.  Nhấp vào nút `vote`.
+5.  **Chuyển sang tài khoản thứ ba** và bỏ phiếu cho "Ung cu vien B" bằng cách nhập `2` vào ô `_candidateId` và nhấp `vote`.
+
+*   **Kiểm tra:**
+    *   Thử dùng lại tài khoản thứ hai để bỏ phiếu lần nữa (cho ứng cử viên 1 hoặc 2). Giao dịch sẽ thất bại với thông báo "You have already voted."
+    *   Kiểm tra lại thông tin ứng cử viên (dùng nút `candidates` với ID `1` và `2`). Bạn sẽ thấy `voteCount` của họ đã tăng lên.
+
+### Bước 4: Kết thúc Cuộc bỏ phiếu (Chỉ Owner)
+
+1.  **Chuyển về tài khoản của owner** (tài khoản đầu tiên).
+2.  Nhấp vào nút `endVoting` màu cam.
+3.  Trạng thái cuộc bỏ phiếu sẽ chuyển sang `Ended` (Đã kết thúc).
+
+*   **Kiểm tra:**
+    *   Nhấp vào nút `votingStatus` màu xanh. Kết quả sẽ hiển thị là `2` (tương ứng với `Ended`).
+    *   Thử bỏ phiếu bằng một tài khoản bất kỳ. Giao dịch sẽ thất bại.
+
+### Bước 5: Xem Kết quả
+
+1.  Sau khi cuộc bỏ phiếu kết thúc, nhấp vào nút `getWinner` màu xanh.
+2.  Kết quả sẽ hiển thị thông tin của người chiến thắng, bao gồm ID, tên và tổng số phiếu bầu.
