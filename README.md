@@ -1,121 +1,214 @@
-# Deploying the Certificate Contract with Remix
+# Blockchain Academic Certificate and Voting Platform
 
-This guide provides instructions on how to compile and deploy the `Certificate.sol` smart contract using the Remix IDE.
+This project is a decentralized application (DApp) built on the Ethereum blockchain. It features two main functionalities:
+1.  **Certificate NFT:** A system for issuing academic certificates as unique, non-fungible tokens (NFTs) using the ERC721 standard. This allows for verifiable and tamper-proof academic credentials.
+2.  **On-Chain Voting:** A transparent and secure voting system where candidates can be registered, and users can cast their votes.
 
-## Instructions
+The smart contracts are developed in Solidity and are intended for deployment and interaction via the Remix IDE.
+
+## Smart Contracts
+
+This repository contains the following smart contracts:
+
+*   `Certificate.sol`: An ERC721 contract for minting academic certificates as NFTs.
+*   `Voting.sol`: A contract that manages a complete voting process, from adding candidates to determining the winner.
+*   `HelloWorld.sol`: A simple contract for demonstration purposes.
+
+## Development and Testing Environment
+
+The primary environment for compiling, deploying, and testing these smart contracts is the **Remix IDE**. This project has been configured to be easily loaded into Remix.
+
+---
+
+# General Instructions for Remix IDE
 
 ### 1. Open the Project in Remix
 
 1.  Go to the Remix IDE: [https://remix.ethereum.org/](https://remix.ethereum.org/)
-2.  In the "File Explorers" tab, click on the "Load a local folder" icon and select the `remix` folder from this project.
+2.  In the "File Explorers" tab, click on the "Load a local folder" icon and select the `remix` folder from this project's root directory.
 3.  You should now see the `contracts` directory in the Remix file explorer.
 
-### 2. Compile the Contract
+### 2. Compile a Contract
 
-1.  In the Remix file explorer, open the `contracts` directory and then open the `Certificate.sol` file.
+1.  In the Remix file explorer, open the `contracts` directory and select the contract file you want to compile (e.g., `Certificate.sol`).
 2.  Go to the "Solidity Compiler" tab (the second icon on the left).
-3.  Make sure the "Compiler" version is set to a version compatible with `^0.8.24` (e.g., `0.8.24+commit.e5a43415`).
-4.  Click the "Compile Certificate.sol" button.
-5.  If the compilation is successful, you will see a green checkmark next to the "Solidity Compiler" tab icon.
+3.  Ensure the "Compiler" version is compatible with the `pragma` version specified in the contract (e.g., `^0.8.20`).
+4.  Click the "Compile" button.
+5.  A green checkmark next to the tab icon indicates successful compilation.
 
-### 3. Deploy the Contract
+### 3. Deploy a Contract
 
 1.  Go to the "Deploy & Run Transactions" tab (the third icon on the left).
-2.  In the "Environment" dropdown, select "Injected Provider - MetaMask" (or your preferred wallet). Make sure your wallet is connected to the desired network (e.g., a testnet like Sepolia).
-3.  In the "Contract" dropdown, select "Certificate - contracts/Certificate.sol".
-4.  Next to the "Deploy" button, you will see a field for the `initialOwner` address. Enter the wallet address that you want to be the owner of the contract.
-5.  Click the "Deploy" button.
-6.  Your wallet will prompt you to confirm the transaction. Confirm it.
-7.  Once the transaction is mined, you will see the deployed contract under the "Deployed Contracts" section in Remix.
+2.  In the "Environment" dropdown, select "Injected Provider - MetaMask" (or your preferred wallet). Ensure your wallet is connected to the desired network (e.g., a testnet like Sepolia).
+3.  In the "Contract" dropdown, select the contract you compiled.
+4.  If the constructor requires arguments (like `initialOwner` in `Certificate.sol`), enter them in the field next to the "Deploy" button.
+5.  Click "Deploy" and confirm the transaction in your wallet.
+6.  The deployed contract will appear under the "Deployed Contracts" section.
 
 ---
 
-# Hướng dẫn triển khai hợp đồng Certificate bằng Remix
+# Contract-Specific Instructions
 
-Hướng dẫn này cung cấp các bước để biên dịch và triển khai hợp đồng thông minh `Certificate.sol` bằng Remix IDE.
+## 🎓 Certificate Contract (`Certificate.sol`)
 
-## Hướng dẫn
+### Deployment
 
-### 1. Mở dự án trong Remix
+*   When deploying, you must provide the wallet address that will be the contract `initialOwner` in the deployment field.
+
+### Interaction
+
+*   **`safeMint(address to, string memory uri)`**: This function can only be called by the contract owner.
+    *   `to`: The wallet address of the recipient who will receive the certificate NFT.
+    *   `uri`: A link to a JSON file (often hosted on IPFS) that contains the certificate's metadata (e.g., student's name, degree, issue date).
+
+---
+
+## 🗳️ Voting Contract (`Voting.sol`)
+
+The contract owner manages the voting lifecycle.
+
+### 1. Add Candidates (Owner Only)
+
+*   This must be done before the vote starts (`NotStarted` state).
+*   Use the `addCandidate` function:
+    *   `_name`: The candidate's name (e.g., `"Candidate A"`).
+    *   `_description`: A short description (e.g., `"Platform for decentralization"`).
+*   Add at least one candidate.
+
+### 2. Start the Vote (Owner Only)
+
+*   Once all candidates are added, call the `startVoting` function to begin the election. The status will change to `Running`.
+
+### 3. Cast a Vote (Public)
+
+*   Anyone can vote while the status is `Running`.
+*   Each person can only vote once.
+*   Use the `vote` function:
+    *   `_candidateId`: The ID number of the candidate you want to vote for. IDs start at `1`.
+
+### 4. End the Vote (Owner Only)
+
+*   When the voting period is over, the owner calls the `endVoting` function. The status will change to `Ended`.
+
+### 5. Get the Winner (Public)
+
+*   After the vote has ended, anyone can call the `getWinner` function to see the results.
+*   It will return the ID, name, and total vote count of the winning candidate.
+
+---
+
+## 👋 HelloWorld Contract (`HelloWorld.sol`)
+
+### Interaction
+
+*   **`greeting`**: Click this button to read the current greeting message.
+*   **`setGreeting(string memory _newGreeting)`**: Enter a new greeting in the text field (e.g., `"Hello Everyone"`) and click the button to update the message.
+
+---
+---
+
+# (Vietnamese) Nền tảng Cấp chứng chỉ Blockchain và Bỏ phiếu
+
+Dự án này là một ứng dụng phi tập trung (DApp) được xây dựng trên blockchain Ethereum. Nó có hai chức năng chính:
+1.  **NFT Chứng chỉ:** Một hệ thống để cấp chứng chỉ học thuật dưới dạng token không thể thay thế (NFT) duy nhất sử dụng tiêu chuẩn ERC721. Điều này cho phép thông tin học vấn có thể kiểm chứng và chống giả mạo.
+2.  **Bỏ phiếu On-Chain:** Một hệ thống bỏ phiếu minh bạch và an toàn, nơi các ứng cử viên có thể được đăng ký và người dùng có thể bỏ phiếu.
+
+Các hợp đồng thông minh được phát triển bằng Solidity và dành cho việc triển khai và tương tác thông qua Remix IDE.
+
+## Hợp đồng thông minh (Smart Contracts)
+
+Repo này chứa các hợp đồng thông minh sau:
+
+*   `Certificate.sol`: Một hợp đồng ERC721 để đúc (mint) chứng chỉ học thuật dưới dạng NFT.
+*   `Voting.sol`: Một hợp đồng quản lý một quy trình bỏ phiếu hoàn chỉnh, từ việc thêm ứng cử viên đến xác định người chiến thắng.
+*   `HelloWorld.sol`: Một hợp đồng đơn giản cho mục đích trình diễn.
+
+## Môi trường Phát triển và Thử nghiệm
+
+Môi trường chính để biên dịch, triển khai và thử nghiệm các hợp đồng thông minh này là **Remix IDE**. Dự án này đã được cấu hình để có thể dễ dàng tải vào Remix.
+
+---
+
+# Hướng dẫn chung cho Remix IDE
+
+### 1. Mở Dự án trong Remix
 
 1.  Truy cập Remix IDE: [https://remix.ethereum.org/](https://remix.ethereum.org/)
-2.  Trong tab "File Explorers", nhấp vào biểu tượng "Load a local folder" và chọn thư mục `remix` từ dự án này.
+2.  Trong tab "File Explorers", nhấp vào biểu tượng "Load a local folder" và chọn thư mục `remix` từ thư mục gốc của dự án này.
 3.  Bây giờ bạn sẽ thấy thư mục `contracts` trong trình khám phá tệp của Remix.
 
-### 2. Biên dịch hợp đồng
+### 2. Biên dịch Hợp đồng
 
-1.  Trong trình khám phá tệp của Remix, mở thư mục `contracts` và sau đó mở tệp `Certificate.sol`.
+1.  Trong trình khám phá tệp của Remix, mở thư mục `contracts` và chọn tệp hợp đồng bạn muốn biên dịch (ví dụ: `Certificate.sol`).
 2.  Chuyển đến tab "Solidity Compiler" (biểu tượng thứ hai ở bên trái).
-3.  Đảm bảo phiên bản "Compiler" được đặt thành phiên bản tương thích với `^0.8.24` (ví dụ: `0.8.24+commit.e5a43415`).
-4.  Nhấp vào nút "Compile Certificate.sol".
-5.  Nếu biên dịch thành công, bạn sẽ thấy một dấu kiểm màu xanh lá cây bên cạnh biểu tượng tab "Solidity Compiler".
+3.  Đảm bảo phiên bản "Compiler" tương thích với phiên bản `pragma` được chỉ định trong hợp đồng (ví dụ: `^0.8.20`).
+4.  Nhấp vào nút "Compile".
+5.  Một dấu kiểm màu xanh lá cây bên cạnh biểu tượng tab cho biết biên dịch đã thành công.
 
-### 3. Triển khai hợp đồng
+### 3. Triển khai Hợp đồng
 
 1.  Chuyển đến tab "Deploy & Run Transactions" (biểu tượng thứ ba ở bên trái).
 2.  Trong menu thả xuống "Environment", chọn "Injected Provider - MetaMask" (hoặc ví bạn muốn). Đảm bảo ví của bạn được kết nối với mạng mong muốn (ví dụ: mạng thử nghiệm như Sepolia).
-3.  Trong menu thả xuống "Contract", chọn "Certificate - contracts/Certificate.sol".
-4.  Bên cạnh nút "Deploy", bạn sẽ thấy một trường cho địa chỉ `initialOwner`. Nhập địa chỉ ví mà bạn muốn làm chủ sở hữu của hợp đồng.
-5.  Nhấp vào nút "Deploy".
-6.  Ví của bạn sẽ nhắc bạn xác nhận giao dịch. Xác nhận nó.
-7.  Sau khi giao dịch được khai thác, bạn sẽ thấy hợp đồng đã triển khai trong phần "Deployed Contracts" trong Remix.
+3.  Trong menu thả xuống "Contract", chọn hợp đồng bạn đã biên dịch.
+4.  Nếu hàm khởi tạo (constructor) yêu cầu tham số (như `initialOwner` trong `Certificate.sol`), hãy nhập chúng vào trường bên cạnh nút "Deploy".
+5.  Nhấp vào "Deploy" và xác nhận giao dịch trong ví của bạn.
+6.  Hợp đồng đã triển khai sẽ xuất hiện trong phần "Deployed Contracts".
 
 ---
 
-# Deploying and Interacting with the HelloWorld Contract
+# Hướng dẫn chi tiết cho từng Hợp đồng
 
-These instructions explain how to use the `HelloWorld.sol` contract in Remix.
+## 🎓 Hợp đồng Chứng chỉ (`Certificate.sol`)
 
-## 1. Compile the Contract
+### Triển khai
 
-1.  Follow the same initial steps to open the project in Remix.
-2.  In the Remix file explorer, open `contracts/HelloWorld.sol`.
-3.  Go to the "Solidity Compiler" tab and click "Compile HelloWorld.sol".
+*   Khi triển khai, bạn phải cung cấp địa chỉ ví sẽ là `initialOwner` (chủ sở hữu ban đầu) của hợp đồng vào trường triển khai.
 
-## 2. Deploy the Contract
+### Tương tác
 
-1.  Go to the "Deploy & Run Transactions" tab.
-2.  Ensure your environment is set (e.g., "Injected Provider - MetaMask").
-3.  In the "Contract" dropdown, select "HelloWorld - contracts/HelloWorld.sol".
-4.  Click the "Deploy" button and confirm the transaction in your wallet.
-
-## 3. Interact with the Contract
-
-Once deployed, you will see the `HelloWorld` contract under "Deployed Contracts".
-
-*   **To read the greeting:**
-    *   Click the blue button labeled `greeting`. The current greeting ("Hello, World!") will be displayed below.
-*   **To change the greeting:**
-    *   In the text field next to the orange `setGreeting` button, type a new message (e.g., "Xin chào Việt Nam"). Make sure to enclose it in double quotes: `"Xin chào Việt Nam"`.
-    *   Click the `setGreeting` button and confirm the transaction in your wallet.
-    *   After the transaction is confirmed, click the `greeting` button again to see the updated message.
+*   **`safeMint(address to, string memory uri)`**: Chức năng này chỉ có thể được gọi bởi chủ sở hữu hợp đồng.
+    *   `to`: Địa chỉ ví của người sẽ nhận NFT chứng chỉ.
+    *   `uri`: Một liên kết đến tệp JSON (thường được lưu trữ trên IPFS) chứa siêu dữ liệu của chứng chỉ (ví dụ: tên sinh viên, bằng cấp, ngày cấp).
 
 ---
 
-# Hướng dẫn triển khai và tương tác với hợp đồng HelloWorld
+## 🗳️ Hợp đồng Bỏ phiếu (`Voting.sol`)
 
-Hướng dẫn này giải thích cách sử dụng hợp đồng `HelloWorld.sol` trong Remix.
+Chủ sở hữu hợp đồng quản lý vòng đời của cuộc bỏ phiếu.
 
-## 1. Biên dịch hợp đồng
+### 1. Thêm Ứng cử viên (Chỉ Owner)
 
-1.  Thực hiện các bước ban đầu tương tự để mở dự án trong Remix.
-2.  Trong trình khám phá tệp của Remix, mở tệp `contracts/HelloWorld.sol`.
-3.  Chuyển đến tab "Solidity Compiler" và nhấp vào "Compile HelloWorld.sol".
+*   Phải được thực hiện trước khi cuộc bỏ phiếu bắt đầu (trạng thái `NotStarted`).
+*   Sử dụng hàm `addCandidate`:
+    *   `_name`: Tên của ứng cử viên (ví dụ: `"Ứng cử viên A"`).
+    *   `_description`: Mô tả ngắn (ví dụ: `"Nền tảng cho sự phi tập trung"`).
+*   Thêm ít nhất một ứng cử viên.
 
-## 2. Triển khai hợp đồng
+### 2. Bắt đầu Bỏ phiếu (Chỉ Owner)
 
-1.  Chuyển đến tab "Deploy & Run Transactions".
-2.  Đảm bảo môi trường của bạn đã được thiết lập (ví dụ: "Injected Provider - MetaMask").
-3.  Trong menu thả xuống "Contract", chọn "HelloWorld - contracts/HelloWorld.sol".
-4.  Nhấp vào nút "Deploy" và xác nhận giao dịch trong ví của bạn.
+*   Sau khi tất cả các ứng cử viên đã được thêm, hãy gọi hàm `startVoting` để bắt đầu cuộc bầu cử. Trạng thái sẽ chuyển thành `Running`.
 
-## 3. Tương tác với hợp đồng
+### 3. Bỏ phiếu (Công khai)
 
-Sau khi triển khai, bạn sẽ thấy hợp đồng `HelloWorld` trong phần "Deployed Contracts".
+*   Bất kỳ ai cũng có thể bỏ phiếu khi trạng thái là `Running`.
+*   Mỗi người chỉ được bỏ phiếu một lần.
+*   Sử dụng hàm `vote`:
+    *   `_candidateId`: Số ID của ứng cử viên bạn muốn bỏ phiếu. ID bắt đầu từ `1`.
 
-*   **Để đọc lời chào:**
-    *   Nhấp vào nút màu xanh có nhãn `greeting`. Lời chào hiện tại ("Hello, World!") sẽ được hiển thị bên dưới.
-*   **Để thay đổi lời chào:**
-    *   Trong trường văn bản bên cạnh nút `setGreeting` màu cam, nhập một thông điệp mới (ví dụ: "Xin chào Việt Nam"). Hãy chắc chắn rằng bạn đặt nó trong dấu ngoặc kép: `"Xin chào Việt Nam"`.
-    *   Nhấp vào nút `setGreeting` và xác nhận giao dịch trong ví của bạn.
-    *   Sau khi giao dịch được xác nhận, hãy nhấp lại vào nút `greeting` để xem thông điệp đã được cập nhật.
+### 4. Kết thúc Bỏ phiếu (Chỉ Owner)
+
+*   Khi thời gian bỏ phiếu kết thúc, chủ sở hữu gọi hàm `endVoting`. Trạng thái sẽ chuyển thành `Ended`.
+
+### 5. Lấy Người chiến thắng (Công khai)
+
+*   Sau khi cuộc bỏ phiếu kết thúc, bất kỳ ai cũng có thể gọi hàm `getWinner` để xem kết quả.
+*   Hàm sẽ trả về ID, tên và tổng số phiếu bầu của ứng cử viên chiến thắng.
+
+---
+
+## 👋 Hợp đồng HelloWorld (`HelloWorld.sol`)
+
+### Tương tác
+
+*   **`greeting`**: Nhấp vào nút này để đọc thông điệp chào mừng hiện tại.
+*   **`setGreeting(string memory _newGreeting)`**: Nhập một lời chào mới vào trường văn bản (ví dụ: `"Xin chào Việt Nam"`) và nhấp vào nút để cập nhật thông điệp.
